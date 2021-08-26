@@ -8,7 +8,7 @@ for ($depth = 0; $depth -lt $maxDepth; $depth++) {
     $flag = 0
     foreach ($folder in (Get-ChildItem -Path $baseDir -Filter $nameToFind -Recurse -Directory -Depth $depth)) {
         $flag = 1
-        if ($folder.Attributes.ToString().Contains("ReparsePoint")) {
+        if ($folder.LinkType -eq "SymbolicLink") {
             # symlink
             continue
         }
@@ -20,7 +20,7 @@ for ($depth = 0; $depth -lt $maxDepth; $depth++) {
         Write-Host ""
         
         Write-Host cmd /c md "$storagePath"
-        cmd /c md "$storagePath"            # Create sotrage folder
+        cmd /c md "$storagePath"            # Create storage folder
         
         Write-Host cmd /c move "$originalPath" "$storagePath"
         cmd /c move "$originalPath" "$storagePath"              # Move $nameToFind folder to storage
